@@ -176,7 +176,7 @@ public class DAO {
         column = new HashMap();
         column.put("String:0", "txtIdentificacion");
         List<String> listaIdUsuarios = new ArrayList<String>();
-        String consulta = "SELECT txtIdentificacion FROM PROFFLINE_TB_USUARIO;";
+        String consulta = "SELECT txtIdentificacion FROM PROFFLINE_TB_USUARIO WHERE numUsuarioBloqueado = '';";
         try {
             HashMap<Integer, HashMap> mapResultado = ResultExecuteQuery.obtenerDatosConsulta(consulta, column, 0);
             if (mapResultado != null) {
@@ -974,10 +974,11 @@ public class DAO {
                         + bancoPromesa.getIdBancoPromesa()
                         + "','" + bancoPromesa.getDescripcionBancoPromesa() + "');";
             } else {
-                sql = "INSERT INTO PROFFLINE_TB_BANCO_PROMESA (idBancoPromesa, descripcionBancoPromesa, tipoRecaudo) VALUES ('"
+                sql = "INSERT INTO PROFFLINE_TB_BANCO_PROMESA (idBancoPromesa, descripcionBancoPromesa, tipoRecaudo, depApps) VALUES ('"
                         + bancoPromesa.getIdBancoPromesa()
                         + "','" + bancoPromesa.getDescripcionBancoPromesa()
-                        + "','" + bancoPromesa.getTipoRecaudo() + "');";
+                        + "','" + bancoPromesa.getTipoRecaudo()
+                        + "','" + bancoPromesa.getDepApps() + "');";
             }
             queries.add(sql);
         }

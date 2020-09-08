@@ -1479,6 +1479,11 @@ public class RFC {
                         bancoPromesa.setIdBancoPromesa(valores[2].trim());
                         bancoPromesa.setDescripcionBancoPromesa(valores[4].trim());
                         bancoPromesa.setTipoRecaudo(valores[5].trim());
+                    } else if (valores.length == 7) {
+                        bancoPromesa.setIdBancoPromesa(valores[2].trim());
+                        bancoPromesa.setDescripcionBancoPromesa(valores[4].trim());
+                        bancoPromesa.setTipoRecaudo(valores[5].trim());
+                        bancoPromesa.setDepApps(valores[6].trim());
                     } else {
                         bancoPromesa.setIdBancoPromesa(valores[2].trim());
                         bancoPromesa.setDescripcionBancoPromesa(valores[4].trim());
@@ -1576,7 +1581,7 @@ public class RFC {
     }
     public static void main(String args[]){
     	try {
-			List<MaterialNuevo> ex = obtenerListaMaterialNuevo("");
+			//List<MaterialNuevo> ex = obtener
 		} catch (Exception e) {
 			// TODO Bloque catch generado automáticamente
 			e.printStackTrace();

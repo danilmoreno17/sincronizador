@@ -5,7 +5,8 @@ public class BancoPromesa {
     private String idBancoPromesa;
     private String descripcionBancoPromesa;
     private String tipoRecaudo;
-
+    private String depApps;
+    
     public String toString() {
         return this.descripcionBancoPromesa;
     }
@@ -33,5 +34,13 @@ public class BancoPromesa {
     public void setTipoRecaudo(String tipoRecaudo) {
         this.tipoRecaudo = tipoRecaudo;
     }
+
+	public String getDepApps() {
+		return depApps;
+	}
+
+	public void setDepApps(String depApps) {
+		this.depApps = depApps;
+	}
 
 }

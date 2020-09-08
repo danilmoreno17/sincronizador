@@ -65,7 +65,7 @@ public class ProgramadorTareas {
                 Calendar inicioCalendario = Calendar.getInstance();
                 long inicio = inicioCalendario.getTimeInMillis();
                 Util.limpiarArchivoLog();
-                int cantidadTotalDeSincronizaciones = 25;
+                int cantidadTotalDeSincronizaciones = 26;
                 VentanaPrincipal.obtenerInstancia().setMaximoProgresoTotal(cantidadTotalDeSincronizaciones);
                 int contador = 0;
                 estaOcupado = true;
@@ -150,6 +150,9 @@ public class ProgramadorTareas {
                 VentanaPrincipal.obtenerInstancia().setProgresoTotal(contador++);
                 VentanaPrincipal.obtenerInstancia().establecerTextoABarraDeProgresoParcial("MATERIAL NUEVO");
                 Sincronizador.sincronizarTablaMaterialNuevo();
+                VentanaPrincipal.obtenerInstancia().setProgresoTotal(contador++);
+                VentanaPrincipal.obtenerInstancia().establecerTextoABarraDeProgresoParcial("MERCADEO");
+                Sincronizador.sincronizarMercadeo();
                 VentanaPrincipal.obtenerInstancia().setProgresoTotal(contador++);
                 VentanaPrincipal.obtenerInstancia().establecerTextoABarraDeProgresoParcial("CONSTANTES");
                 Sincronizador.sincronizadorTablaConstantes();

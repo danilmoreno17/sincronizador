@@ -3,7 +3,9 @@ package com.proffline.sincronizador.tareas;
 import com.proffline.sincronizador.bean.BancoCliente;
 import com.proffline.sincronizador.bean.BancoPromesa;
 import com.proffline.sincronizador.bean.BeanMarcaIndicador;
+import com.proffline.sincronizador.bean.BeanMercadeo;
 import com.proffline.sincronizador.bean.BeanParametro;
+import com.proffline.sincronizador.bean.BeanPromocion;
 import com.proffline.sincronizador.bean.BeanVentaCruzada;
 import com.proffline.sincronizador.bean.BloqueoEntrega;
 import com.proffline.sincronizador.bean.ClaseMaterial;
@@ -940,6 +942,8 @@ public class Sincronizador {
             	List<ClsQueries> queries = new ArrayList();            	 
             	queries = sincronizarTablaCliente(codigoVendedor,queries);
             	if(!queries.isEmpty()){
+            		resultExecute.ejecutarConsultaPorVendedor2(queries, codigoVendedor);
+		            queries.clear();
 					queries = sincronizaDestinatario(codigoVendedor,queries);				
 					//queries = sincronizaMaterialConsultaDinamica(codigoVendedor,queries);
 		            queries = sincronizaTablaPartidasIndividualesAbiertas(codigoVendedor,queries);
@@ -974,14 +978,14 @@ public class Sincronizador {
 			}
             
         //}
-            /*try {
+            try {
                 for (int i = 0; i < Constante.ID_SINCRONIZADOR.length; i++) {
                     activaSincronizacion(Constante.ID_SINCRONIZADOR[i], codigoVendedor);
                 }
                 VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(1, Util.mensajeCargaDatosExitosaSQL("PROFFLINE_TB_SINCRONIZACION " + codigoVendedor)));
             } catch (Exception e) {
                 VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(3, Util.mensajeCargaDatosNoExitosaSQL("PROFFLINE_TB_SINCRONIZACION " + codigoVendedor)));
-            }*/
+            }
 
         }
         listaTodosMaterial.clear();
@@ -1015,6 +1019,32 @@ public class Sincronizador {
             //VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(3, Util.mensajeCargaDatosNoExitosaSQL("PROFFLINE_TB_MARCA_ESTRATEGICA & PROFFLINE_TB_INDICADORES  " + codigoVendedor)));
         }
         return queries;
+    }
+    
+    public static void sincronizarMercadeo(){
+		List<BeanMercadeo> listMercadeo = null;
+		List<BeanPromocion> listPromocion = null;
+    	SqlMaterial sqlMaterial = new SqlMaterialImpl();
+    	try {
+
+            VentanaPrincipal.obtenerInstancia().establecerTextoABarraDeProgresoParcial((new StringBuilder()).append("MATERIAL MERCADEO ").toString());
+            listMercadeo = SPedidos.listaMaterialesMercadeo();
+    		if(listMercadeo != null && listMercadeo.size() > 0){
+            	sqlMaterial.insertarMaterialesMercadeo(listMercadeo);
+				listMercadeo.clear();
+			}
+                       
+            VentanaPrincipal.obtenerInstancia().establecerTextoABarraDeProgresoParcial((new StringBuilder()).append("MATERIAL PROMOCION ").toString());
+            listPromocion = SPedidos.listaMaterialesPromocion();
+            if(listPromocion != null && listPromocion.size() > 0){
+				sqlMaterial.insertarMaterialesPromocion(listPromocion);
+				listPromocion.clear();
+			}
+        } catch (Exception ex) {
+        	System.out.println(ex.getLocalizedMessage());
+            Logger.getLogger(Sincronizador.class.getName()).log(Level.SEVERE, null, ex);
+            //VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(3, Util.mensajeCargaDatosNoExitosaSQL("PROFFLINE_TB_MARCA_ESTRATEGICA & PROFFLINE_TB_INDICADORES  " + codigoVendedor)));
+        }
     }
     
     private static List<ClsQueries> sincronizarMarcaEstrategica(String codigoVendedor,List<ClsQueries> queries){
@@ -1442,6 +1472,14 @@ public class Sincronizador {
             case 33:
             	cantidadRegistros = DAO.filasTabla("PROFFLINE_TB_MATERIAL_NUEVO","");
             	break;
+            case 34:
+            	cantidadRegistros = DAO.filasTabla("PROFFLINE_TB_MATERIAL_VENTA_CRUZADA","");
+            	cantidadRegistros += DAO.filasTabla("PROFFLINE_TB_VENTA_CRUZADA","");
+            	break;
+            case 35:
+            	cantidadRegistros = DAO.filasTabla("PROFFLINE_TB_MATERIAL_MERCADEO","");
+            	cantidadRegistros += DAO.filasTabla("PROFFLINE_TB_MATERIAL_PROMOCION","");
+            	break;
             default:
                 cantidadRegistros = 0;
                 break;
@@ -1568,6 +1606,14 @@ public class Sincronizador {
                 break;
             case 33:
             	cantidadRegistros = DAO.filasTabla("PROFFLINE_TB_MATERIAL_NUEVO","");
+            	break;
+            case 34:
+            	cantidadRegistros = DAO.filasTabla("PROFFLINE_TB_MATERIAL_VENTA_CRUZADA","");
+            	cantidadRegistros += DAO.filasTabla("PROFFLINE_TB_VENTA_CRUZADA","");
+            	break;
+            case 35:
+            	cantidadRegistros = DAO.filasTabla("PROFFLINE_TB_MATERIAL_MERCADEO","");
+            	cantidadRegistros += DAO.filasTabla("PROFFLINE_TB_MATERIAL_PROMOCION","");
             	break;
             default:
                 cantidadRegistros = 0;

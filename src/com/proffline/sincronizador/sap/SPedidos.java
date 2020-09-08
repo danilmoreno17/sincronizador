@@ -1,5 +1,7 @@
 package com.proffline.sincronizador.sap;
 
+import com.proffline.sincronizador.bean.BeanMercadeo;
+import com.proffline.sincronizador.bean.BeanPromocion;
 import com.proffline.sincronizador.bean.BeanSede;
 import com.proffline.sincronizador.bean.Cliente;
 import com.proffline.sincronizador.bean.Material;
@@ -8,6 +10,9 @@ import com.proffline.sincronizador.gui.VentanaPrincipal;
 import com.proffline.sincronizador.utilidades.Util;
 import com.promesa.sincronizador.pedidos.sql.impl.SqlDivisionImpl;
 import com.promesa.sincronizador.pedidos.sql.impl.SqlMaterialImpl;
+
+
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +47,7 @@ public class SPedidos {
                     bm.setStrVentasAcumulado(values[3].trim().replace("'", ""));
                     bm.setStrVentasPromedio(values[4].trim().replace("'", ""));
                     bm.setStrCliente((new StringBuilder()).append("").append(Integer.parseInt(values[1])).toString());
+                    bm.setCantSug(Double.parseDouble(values[5]));
                     listaTemp.add(bm);
                 }
                 listaFinal.add(listaTemp);
@@ -379,5 +385,90 @@ public class SPedidos {
             return null;
         }
     }
+    
+    @SuppressWarnings("rawtypes")
+	public static List<BeanMercadeo> listaMaterialesMercadeo() {
+		try {
+			List<BeanMercadeo> listaFinal = new ArrayList<BeanMercadeo>();
+			VentanaPrincipal.obtenerInstancia().setModoProgresoParcial(true);
+			ConexionSAP con = Conexion.obtenerConexionSAP();
+			if (con != null) {
+				VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola((new StringBuilder()).append(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola()).append(Util.convierteTextoAFormatoHTML(2, Util.mensajeConexionExitosaSAP((new StringBuilder()).append("MATERIALES MERCADEO: ").toString()))).toString());
+				con.RegistrarRFC("ZSD_RFC_GEN_FOCO_MERC");
+				con.EjecutarRFC();
+				con.CreaTabla("ET_MATERIAL");
+				List ur1 = con.ObtenerDatosTabla();
+				con.DesconectarSAP();
+				String[] values = null;
+				BeanMercadeo bm = null;
+				for (int i = 0; i < ur1.size(); i++) {
+					String cadena = String.valueOf(ur1.get(i));
+					values = cadena.split("¬");
+					bm = new BeanMercadeo();
+					bm.setStrFechaCarga(values[1]);
+					bm.setStrDivisionCliente(values[2]);
+					bm.setStrCanalCliente(values[3]);
+					bm.setStrCodigoMaterial(""+Integer.parseInt(values[4]));
+					bm.setStrDescripcion(values[5]);
+					bm.setStrFechaVigenciaDesde(values[6]);
+					bm.setStrFechaVigenciaHasta(values[7]);
+					listaFinal.add(bm);
+				}
+				return listaFinal;
+			} else {
+				 Util.escribirErrorAArchivoLog((new StringBuilder()).append("Error al carcar materiales de mercadeo ").toString());
+				 VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola((new StringBuilder()).append(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola()).append(Util.convierteTextoAFormatoHTML(3, Util.mensajeConexionNoExitosaSAP((new StringBuilder()).append("MATERIALES MERCADEO: ").toString()))).toString());
+				return null;
+			}
+		} catch (Exception e) {
+			Util.escribirErrorAArchivoLog((new StringBuilder()).append(Util.getStackTrace(e)).toString());
+            VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola((new StringBuilder()).append(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola()).append(Util.convierteTextoAFormatoHTML(3, Util.mensajeConexionNoExitosaSAP((new StringBuilder()).append("MATERIALES MERCADEO: ").toString()))).toString());
+			return null;
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public static List<BeanPromocion> listaMaterialesPromocion() {
+		try {
+			List<BeanPromocion> listaFinal = new ArrayList<BeanPromocion>();
+			VentanaPrincipal.obtenerInstancia().setModoProgresoParcial(true);
+			ConexionSAP con = Conexion.obtenerConexionSAP();
+			if (con != null) {
+				VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola((new StringBuilder()).append(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola()).append(Util.convierteTextoAFormatoHTML(2, Util.mensajeConexionExitosaSAP((new StringBuilder()).append("MATERIALES MERCADEO: ").toString()))).toString());
+				con.RegistrarRFC("ZSD_RFC_GEN_PROMOCION");
+				con.EjecutarRFC();
+				con.CreaTabla("ET_MATERIAL");
+				List ur1 = con.ObtenerDatosTabla();
+				con.DesconectarSAP();
+				String[] values = null;
+				BeanPromocion bp = null;
+				for (int i = 0; i < ur1.size(); i++) {
+					String cadena = String.valueOf(ur1.get(i));
+					values = cadena.split("¬");
+					bp = new BeanPromocion();
+					bp.setStrFecha(values[1]);
+					bp.setStrDivisionCliente(values[2]);
+					bp.setStrCanalCliente(values[3]);
+					bp.setStrCodigoCliente(values[4].equals("")?"":""+Integer.parseInt(values[4]));
+					bp.setStrTitulo(values[5]);
+					bp.setStrDescripcion(values[6]);
+					bp.setStrFamilia1(values[7]);
+					bp.setStrFamilia2(values[8]);
+					bp.setStrFechaVigenciaDesde(values[9]);
+					bp.setStrFechaVigenciaHasta(values[10]);
+					listaFinal.add(bp);
+				}
+				return listaFinal;
+			} else {
+				Util.escribirErrorAArchivoLog((new StringBuilder()).append("Error al carcar materiales de mercadeo ").toString());
+				VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola((new StringBuilder()).append(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola()).append(Util.convierteTextoAFormatoHTML(3, Util.mensajeConexionNoExitosaSAP((new StringBuilder()).append("MATERIALES MERCADEO: ").toString()))).toString());
+				return null;
+			}
+		} catch (Exception e) {
+			Util.escribirErrorAArchivoLog((new StringBuilder()).append(Util.getStackTrace(e)).toString());
+            VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola((new StringBuilder()).append(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola()).append(Util.convierteTextoAFormatoHTML(3, Util.mensajeConexionNoExitosaSAP((new StringBuilder()).append("MATERIALES MERCADEO: ").toString()))).toString());
+			return null;
+		}
+	}
 
 }

@@ -5,6 +5,8 @@
  */
 package com.promesa.sincronizador.pedidos.sql.impl;
 
+import com.proffline.sincronizador.bean.BeanMercadeo;
+import com.proffline.sincronizador.bean.BeanPromocion;
 import com.proffline.sincronizador.bean.BeanVentaCruzada;
 import com.proffline.sincronizador.bean.Material;
 import com.proffline.sincronizador.conexion.ConexionJDBC;
@@ -144,7 +146,7 @@ public class SqlMaterialImpl implements SqlMaterial {
         String cadenaSQL;
         for (Material m : listaMateriales) {
 //            Material m = (Material) i$.next();
-            cadenaSQL = (new StringBuilder()).append(" INSERT INTO PROFFLINE_TB_MATERIAL_TOP_CLIENTE(MATNR, STOCK, S_U, SHORT_TEXT, TEXT_LINE, TARGET_QTY, PRICE_1, PRICE_2, PRICE_3, PRICE_4, PRDHA, HER, NORMT, ZZORDCO, CELL_DESIGN, MTART, TYPEMAT, GRUPO_COMPRA, ST_1, VENTAS_ACUMULADO, VENTAS_PROMEDIO, CLIENTE) VALUES ('").append(m.getStrMATNR()).append("', '").append(m.getStrStock()).append("','").append(m.getStrSU()).append("','").append(m.getStrShortText()).append("','").append(m.getStrTextLine()).append("','").append(m.getStrTargetQTY()).append("','").append(m.getStrPrice1()).append("','").append(m.getStrPrice2()).append("','").append(m.getStrPrice3()).append("','").append(m.getStrPrice4()).append("','").append(m.getStrPRDHA()).append("','").append(m.getTipoMaterial()).append("','").append(m.getStrNORMT()).append("','").append(m.getStrZZORDCO()).append("','").append(m.getStrCellDesign()).append("','").append(m.getMTART()).append("','").append(m.getStrTypeMat()).append("','").append(m.getStrGrupoCompra()).append("','").append(m.getStrSt1()).append("','").append(m.getStrVentasAcumulado()).append("','").append(m.getStrVentasPromedio()).append("','").append(m.getStrCliente()).append("');").toString();
+            cadenaSQL = (new StringBuilder()).append(" INSERT INTO PROFFLINE_TB_MATERIAL_TOP_CLIENTE(MATNR, STOCK, S_U, SHORT_TEXT, TEXT_LINE, TARGET_QTY, PRICE_1, PRICE_2, PRICE_3, PRICE_4, PRDHA, HER, NORMT, ZZORDCO, CELL_DESIGN, MTART, TYPEMAT, GRUPO_COMPRA, ST_1, VENTAS_ACUMULADO, VENTAS_PROMEDIO, CLIENTE, VENTA_SUGERIDA) VALUES ('").append(m.getStrMATNR()).append("', '").append(m.getStrStock()).append("','").append(m.getStrSU()).append("','").append(m.getStrShortText()).append("','").append(m.getStrTextLine()).append("','").append(m.getStrTargetQTY()).append("','").append(m.getStrPrice1()).append("','").append(m.getStrPrice2()).append("','").append(m.getStrPrice3()).append("','").append(m.getStrPrice4()).append("','").append(m.getStrPRDHA()).append("','").append(m.getTipoMaterial()).append("','").append(m.getStrNORMT()).append("','").append(m.getStrZZORDCO()).append("','").append(m.getStrCellDesign()).append("','").append(m.getMTART()).append("','").append(m.getStrTypeMat()).append("','").append(m.getStrGrupoCompra()).append("','").append(m.getStrSt1()).append("','").append(m.getStrVentasAcumulado()).append("','").append(m.getStrVentasPromedio()).append("','").append(m.getStrCliente()).append("','").append(m.getCantSug()).append("');").toString();
             
             queries.add(new ClsQueries("PROFFLINE_TB_MATERIAL_TOP_CLIENTE",cadenaSQL,"INSERT"));
         }
@@ -479,6 +481,57 @@ public class SqlMaterialImpl implements SqlMaterial {
         }
         return f;
     }
+
+	@Override
+	public void insertarMaterialesMercadeo(List<BeanMercadeo> listMercadeo) {
+		String cadenaSQL;
+		List<String> consultas = new ArrayList<String>();
+		for(BeanMercadeo m : listMercadeo){
+			cadenaSQL = " INSERT INTO PROFFLINE_TB_MATERIAL_MERCADEO (FECHA_CARGA,DIVISION_CLIENTE,CANAL_CLIENTE,CODIGO_MATERIAL,DESCRIPCION,FECHA_VIG_DES,FECHA_VIG_HAS) "
+					+ "VALUES ('"+m.getStrFechaCarga()
+					+"','"+m.getStrDivisionCliente()
+					+"','"+m.getStrCanalCliente()
+					+"','"+m.getStrCodigoMaterial()
+					+"','"+m.getStrDescripcion()
+					+"','"+m.getStrFechaVigenciaDesde()
+					+"','"+m.getStrFechaVigenciaHasta()+"')";
+			consultas.add(cadenaSQL);
+		}
+		ResultExecute re = new ResultExecute();
+        try {
+            re.ejecutarConsulta(consultas);
+            VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(1, Util.mensajeCargaDatosExitosaSQL("MERCADEO")));
+        } catch (Exception e) {
+            VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(3, Util.mensajeCargaDatosNoExitosaSQL("MERCADEO")));
+        }
+	}
+
+	@Override
+	public void insertarMaterialesPromocion(List<BeanPromocion> listPromocion) {
+		String cadenaSQL;
+		List<String> consultas = new ArrayList<String>();
+		for(BeanPromocion listp: listPromocion){
+			cadenaSQL = " INSERT INTO PROFFLINE_TB_MATERIAL_PROMOCION (FECHA,DIVISION_CLIENTE,CANAL_CLIENTE,CODIGO_CLIENTE,TITULO,FAMILIA_1,DESCRIPCION,FAMILIA_2,FECHA_VIG_DES,FECHA_VIG_HAS) "
+					+ "VALUES ('"+listp.getStrFecha()
+					+"','"+listp.getStrDivisionCliente()
+					+"','"+listp.getStrCanalCliente()
+					+"','"+listp.getStrCodigoCliente()
+					+"','"+listp.getStrTitulo()
+					+"','"+listp.getStrFamilia1()
+					+"','"+listp.getStrDescripcion()
+					+"','"+listp.getStrFamilia2()
+					+"','"+listp.getStrFechaVigenciaDesde()
+					+"','"+listp.getStrFechaVigenciaHasta()+"')";
+			consultas.add(cadenaSQL);
+		}
+		ResultExecute re = new ResultExecute();
+        try {
+            re.ejecutarConsulta(consultas);
+            VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(1, Util.mensajeCargaDatosExitosaSQL("MERCADEO")));
+        } catch (Exception e) {
+            VentanaPrincipal.obtenerInstancia().agregarTextoAEditorConsola(VentanaPrincipal.obtenerInstancia().obtenerTextoDeEditorConsola() + Util.convierteTextoAFormatoHTML(3, Util.mensajeCargaDatosNoExitosaSQL("MERCADEO")));
+        }
+	}
 
 	
 

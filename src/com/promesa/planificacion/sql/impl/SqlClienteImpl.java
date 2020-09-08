@@ -110,7 +110,7 @@ public class SqlClienteImpl implements SqlCliente {
                     +c.getStrCodCanalDist().replaceAll("'", "''")           +"', '"+c.getStrCodSector().replaceAll("'", "''")               +"', '"
                     +c.getIndicadorIva().replaceAll("'", "''")              +"', '"+c.getStrOficinaVentas().replaceAll("'", "''")           +"', '"
                     +c.getStrGrupoVentas().replaceAll("'", "''")            +"', '"+c.getStrClase().replaceAll("'", "''") 					+"', '"
-            		+c.getStrCanal().replaceAll("'", "''") 					+"); ";
+            		+c.getStrCanal().replaceAll("'", "''") 					+"'); ";
             queries.add(new ClsQueries(TABLA_CLIENTE,sqlCliente,"INSERT"));
             sqlEmpCli = "INSERT INTO " + TABLA_EMPLEADO_CLIENTE+ " VALUES('"+s+"', '"+c.getStrIdCliente()+"');";
             queries.add(new ClsQueries(TABLA_CLIENTE,sqlEmpCli,"INSERT"));

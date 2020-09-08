@@ -37,6 +37,7 @@ public class Material {
 	private String strCosto;
 	private String strMargen_Obj;
 	private String strVentaReal;
+	private Double cantSug;
 	
     public String getStrVentaReal() {
 		return strVentaReal;
@@ -261,6 +262,14 @@ public class Material {
 
 	public void setStrCosto(String strCosto) {
 		this.strCosto = strCosto;
+	}
+
+	public Double getCantSug() {
+		return cantSug;
+	}
+
+	public void setCantSug(Double cantSug) {
+		this.cantSug = cantSug;
 	}
 
 }

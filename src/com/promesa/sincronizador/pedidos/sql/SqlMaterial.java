@@ -5,7 +5,9 @@
  */
 package com.promesa.sincronizador.pedidos.sql;
 
+import com.proffline.sincronizador.bean.BeanMercadeo;
 import com.proffline.sincronizador.bean.BeanVentaCruzada;
+import com.proffline.sincronizador.bean.BeanPromocion;
 import com.proffline.sincronizador.bean.Material;
 import com.proffline.sincronizador.sqlite.ResultExecute;
 import com.proffline.sincronizador.utilidades.ClsQueries;
@@ -33,6 +35,10 @@ public interface SqlMaterial {
     public abstract List<ClsQueries> migrarMaterialesTopTipologia2(List list, List<Material> list1, String s,List<ClsQueries> queries);
 
     public abstract List<ClsQueries>  migrarMaterialesVentaCruzada(List<List<Material>> listm, List<Material> listaMaterial, String s,List<ClsQueries> queries);
+    
+    public abstract void insertarMaterialesMercadeo(List<BeanMercadeo> listMercadeo);
+    
+    public abstract void insertarMaterialesPromocion(List<BeanPromocion> listPromocion);
     
     public abstract List obtenerTodosMateriales2();
 
